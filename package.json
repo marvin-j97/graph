@@ -1,0 +1,21 @@
+{
+  "name": "graph.ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "watch": "tsc --watch",
+    "test": "node test/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dotvirus/graph.ts.git"
+  },
+  "keywords": [],
+  "author": "dotvirus",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dotvirus/graph.ts/issues"
+  },
+  "homepage": "https://github.com/dotvirus/graph.ts#readme"
+}
