@@ -61,7 +61,7 @@ const [e_f_edge, f_e_edge] = g.connectTwoway("e", "f");
 compare(e.degree(), 2);
 compare(f.degree(), 2);
 
-const network = graph.Graph.from([
+const networkMap = [
   ["a", "b"],
   ["b", "c"],
   ["c", "d"],
@@ -69,7 +69,9 @@ const network = graph.Graph.from([
   ["f"],
   ["g"],
   ["e", "h"]
-]);
+];
+
+const network = graph.Graph.from(networkMap);
 
 compare(network.numVertices(), 8);
 compare(network.numEdges(), 5);
@@ -93,3 +95,5 @@ compareArrays(DFTKeys, ["a", "b", "c", "e", "h", "d"]);
 const BFTKeys = [];
 network.getVertex("a").breadthFirstTraversal(v => BFTKeys.push(v.key));
 compareArrays(BFTKeys, ["a", "b", "c", "d", "e", "h"]);
+
+compare(network.generateMap().length, networkMap.length);

@@ -5,12 +5,26 @@ const edge_1 = require("./edge");
 class Graph {
     constructor() {
         this.vertices = {};
+        this._numVertices = 0;
         this.edges = [];
+        this._numEdges = 0;
     }
-    static from(nodes) {
+    generateMap() {
+        const map = [];
+        for (const edge of this.getEdges()) {
+            map.push([edge.getStart().key, edge.getEnd().key]);
+        }
+        for (const vertex of this.getVertices()) {
+            if (vertex.degree() === 0) {
+                map.push([vertex.key, undefined]);
+            }
+        }
+        return map;
+    }
+    static from(map) {
         const g = new Graph();
         const vertexExists = (key) => !!g.getVertex(key);
-        for (const [start, end] of nodes) {
+        for (const [start, end] of map) {
             if (!vertexExists(start))
                 g.insertVertex(start);
             if (end) {
@@ -21,17 +35,17 @@ class Graph {
         }
         return g;
     }
+    numVertices() {
+        return this._numVertices;
+    }
+    numEdges() {
+        return this._numEdges;
+    }
     getVertex(key) {
         return this.vertices[key] || null;
     }
-    numVertices() {
-        return Object.keys(this.vertices).length;
-    }
     getVertices() {
         return Object.values(this.vertices).slice();
-    }
-    numEdges() {
-        return this.edges.length;
     }
     getEdges() {
         return this.edges.slice();
@@ -41,6 +55,7 @@ class Graph {
             throw `Vertex '${key}' already in graph`;
         const vertex = new vertex_1.Vertex(key);
         this.vertices[key] = vertex;
+        this._numVertices++;
         return vertex;
     }
     connectOneway(start, end) {
@@ -56,6 +71,7 @@ class Graph {
         a.addEdge(edge);
         b.addEdge(edge);
         this.edges.push(edge);
+        this._numEdges++;
         return edge;
     }
     connectTwoway(start, end) {

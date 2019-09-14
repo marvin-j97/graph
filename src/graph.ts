@@ -6,14 +6,32 @@ type VertexMap = HashMap<Vertex>;
 
 export class Graph {
   protected vertices: VertexMap = {};
+  private _numVertices = 0;
   protected edges: Edge[] = [];
+  private _numEdges = 0;
 
-  static from(nodes: [string, string | undefined][]): Graph {
+  generateMap() {
+    const map = [] as [string, string | undefined][];
+
+    for (const edge of this.getEdges()) {
+      map.push([edge.getStart().key, edge.getEnd().key]);
+    }
+
+    for (const vertex of this.getVertices()) {
+      if (vertex.degree() === 0) {
+        map.push([vertex.key, undefined]);
+      }
+    }
+
+    return map;
+  }
+
+  static from(map: [string, string | undefined][]): Graph {
     const g = new Graph();
 
     const vertexExists = (key: string) => !!g.getVertex(key);
 
-    for (const [start, end] of nodes) {
+    for (const [start, end] of map) {
       if (!vertexExists(start))
         g.insertVertex(start);
 
@@ -28,20 +46,20 @@ export class Graph {
     return g;
   }
 
+  numVertices() {
+    return this._numVertices;
+  }
+
+  numEdges() {
+    return this._numEdges;
+  }
+
   getVertex(key: string): Vertex | null {
     return this.vertices[key] || null;
   }
 
-  numVertices(): number {
-    return Object.keys(this.vertices).length;
-  }
-
   getVertices(): Vertex[] {
     return Object.values(this.vertices).slice();
-  }
-
-  numEdges(): number {
-    return this.edges.length;
   }
 
   getEdges(): Edge[] {
@@ -54,6 +72,7 @@ export class Graph {
 
     const vertex = new Vertex(key);
     this.vertices[key] = vertex;
+    this._numVertices++;
     return vertex;
   }
 
@@ -76,6 +95,7 @@ export class Graph {
     a.addEdge(edge);
     b.addEdge(edge);
     this.edges.push(edge);
+    this._numEdges++;
     return edge;
   }
 

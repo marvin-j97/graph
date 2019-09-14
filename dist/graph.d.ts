@@ -4,12 +4,15 @@ import { HashMap } from "./util";
 declare type VertexMap = HashMap<Vertex>;
 export declare class Graph {
     protected vertices: VertexMap;
+    private _numVertices;
     protected edges: Edge[];
-    static from(nodes: [string, string | undefined][]): Graph;
-    getVertex(key: string): Vertex | null;
+    private _numEdges;
+    generateMap(): [string, string | undefined][];
+    static from(map: [string, string | undefined][]): Graph;
     numVertices(): number;
-    getVertices(): Vertex[];
     numEdges(): number;
+    getVertex(key: string): Vertex | null;
+    getVertices(): Vertex[];
     getEdges(): Edge[];
     insertVertex(key: string): Vertex;
     connectOneway(start: string, end: string): Edge;
