@@ -5,19 +5,60 @@ class Vertex {
         this.edges = [];
         this.key = key;
     }
+    removeEdge(edge) {
+        if (!!this.edges.find(e => e === edge)) {
+            this.edges = this.edges.filter(e => e !== edge);
+            const opposite = this.opposite(edge);
+            opposite.removeEdge(edge);
+        }
+    }
     addEdge(edge) {
         this.edges.push(edge);
+    }
+    isSource() {
+        return this.indegree() === 0;
+    }
+    isSink() {
+        return this.outdegree() === 0;
+    }
+    isLeaf() {
+        return this.edges.length === 1;
+    }
+    isIsolated() {
+        return this.edges.length === 0;
+    }
+    indegree() {
+        return this.incomingEdges().length;
+    }
+    outdegree() {
+        return this.outgoingEdges().length;
     }
     degree() {
         return this.edges.length;
     }
-    out() {
-        return this.outgoingEdges().map(e => e.getEnd());
+    in(label) {
+        return this.incomingEdges(label).map(e => e.getStart());
     }
-    outgoingEdges() {
-        return this
+    out(label) {
+        return this.outgoingEdges(label).map(e => e.getEnd());
+    }
+    incomingEdges(label) {
+        let incoming = this
+            .incidentEdges()
+            .filter(e => e.getEnd().key == this.key);
+        if (label) {
+            incoming = incoming.filter(e => e.getLabel() == label);
+        }
+        return incoming;
+    }
+    outgoingEdges(label) {
+        let outgoing = this
             .incidentEdges()
             .filter(e => e.getStart().key == this.key);
+        if (label) {
+            outgoing = outgoing.filter(e => e.getLabel() == label);
+        }
+        return outgoing;
     }
     incidentEdges() {
         return this.edges.slice();

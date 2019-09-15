@@ -9,22 +9,76 @@ export class Vertex {
     this.key = key;
   }
 
+  removeEdge(edge: Edge) {
+    if (!!this.edges.find(e => e === edge)) {
+      this.edges = this.edges.filter(e => e !== edge);
+      const opposite = this.opposite(edge);
+      opposite.removeEdge(edge);
+    }
+  }
+
   addEdge(edge: Edge): void {
     this.edges.push(edge);
+  }
+
+  isSource(): boolean {
+    return this.indegree() === 0;
+  }
+
+  isSink(): boolean {
+    return this.outdegree() === 0;
+  }
+
+  isLeaf(): boolean {
+    return this.edges.length === 1;
+  }
+
+  isIsolated(): boolean {
+    return this.edges.length === 0;
+  }
+
+  indegree(): number {
+    return this.incomingEdges().length;
+  }
+
+  outdegree(): number {
+    return this.outgoingEdges().length;
   }
 
   degree(): number {
     return this.edges.length;
   }
 
-  out(): Vertex[] {
-    return this.outgoingEdges().map(e => e.getEnd());
+  in(label?: string): Vertex[] {
+    return this.incomingEdges(label).map(e => e.getStart());
   }
 
-  outgoingEdges(): Edge[] {
-    return this
+  out(label?: string): Vertex[] {
+    return this.outgoingEdges(label).map(e => e.getEnd());
+  }
+
+  incomingEdges(label?: string): Edge[] {
+    let incoming = this
+      .incidentEdges()
+      .filter(e => e.getEnd().key == this.key);
+
+    if (label) {
+      incoming = incoming.filter(e => e.getLabel() == label);
+    }
+
+    return incoming;
+  }
+
+  outgoingEdges(label?: string): Edge[] {
+    let outgoing = this
       .incidentEdges()
       .filter(e => e.getStart().key == this.key);
+
+    if (label) {
+      outgoing = outgoing.filter(e => e.getLabel() == label);
+    }
+
+    return outgoing;
   }
 
   incidentEdges(): Edge[] {
