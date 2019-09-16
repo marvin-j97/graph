@@ -1,9 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const iterator_1 = require("./iterator");
 class Vertex {
     constructor(key) {
         this.edges = [];
         this.key = key;
+    }
+    getKey() {
+        return this.key;
     }
     removeEdge(edge) {
         if (!!this.edges.find(e => e === edge)) {
@@ -77,77 +81,27 @@ class Vertex {
         }
         return adjacents;
     }
-    depthFirstSearch(searchKey) {
-        const stack = [this];
-        const visited = {};
-        const hasBeenVisited = (key) => visited[key] === true;
-        while (!!stack.length) {
-            const vertex = stack.pop();
-            if (vertex) {
-                if (vertex.key == searchKey)
-                    return vertex;
-                if (!hasBeenVisited(vertex.key)) {
-                    visited[vertex.key] = true;
-                    stack.push(...vertex.out());
-                }
+    search(searchKey, traversal) {
+        let vertex = null;
+        traversal(this, v => {
+            if (v.key == searchKey) {
+                vertex = v;
+                return true;
             }
-        }
-        return null;
+        });
+        return vertex;
+    }
+    depthFirstSearch(searchKey) {
+        return this.search(searchKey, iterator_1.Iterator.depthFirstTraversal);
     }
     breadthFirstSearch(searchKey) {
-        const queue = [this];
-        const visited = {};
-        const hasBeenVisited = (key) => visited[key] === true;
-        visited[this.key] = true;
-        while (!!queue.length) {
-            const vertex = queue.shift();
-            if (vertex) {
-                if (vertex.key === searchKey)
-                    return vertex;
-                for (const other of vertex.out()) {
-                    if (!hasBeenVisited(other.key)) {
-                        visited[other.key] = true;
-                        queue.push(other);
-                    }
-                }
-            }
-        }
-        return null;
+        return this.search(searchKey, iterator_1.Iterator.breadthFirstTraversal);
     }
-    depthFirstTraversal(func) {
-        const stack = [this];
-        const visited = {};
-        const hasBeenVisited = (key) => visited[key] === true;
-        while (!!stack.length) {
-            const vertex = stack.pop();
-            if (vertex) {
-                func(vertex);
-                if (!hasBeenVisited(vertex.key)) {
-                    visited[vertex.key] = true;
-                    stack.push(...vertex.out());
-                }
-            }
-        }
-        return null;
+    depthFirstTraversal(onVisit) {
+        return iterator_1.Iterator.depthFirstTraversal(this, onVisit);
     }
-    breadthFirstTraversal(func) {
-        const queue = [this];
-        const visited = {};
-        const hasBeenVisited = (key) => visited[key] === true;
-        visited[this.key] = true;
-        while (!!queue.length) {
-            const vertex = queue.shift();
-            if (vertex) {
-                func(vertex);
-                for (const other of vertex.out()) {
-                    if (!hasBeenVisited(other.key)) {
-                        visited[other.key] = true;
-                        queue.push(other);
-                    }
-                }
-            }
-        }
-        return null;
+    breadthFirstTraversal(onVisit) {
+        return iterator_1.Iterator.breadthFirstTraversal(this, onVisit);
     }
 }
 exports.Vertex = Vertex;

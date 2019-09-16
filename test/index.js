@@ -199,3 +199,64 @@ compare(universalTest.isUniversalVertex("b"), false);
 compare(universalTest.isUniversalVertex("c"), false);
 compare(universalTest.isUniversalVertex("d"), false);
 compare(universalTest.isUniversalVertex("e"), false);
+
+const connectedTest = graph.Graph.from([{
+    from: "a",
+    to: "b"
+  },
+  {
+    from: "b",
+    to: "c"
+  },
+  {
+    from: "c",
+    to: "h"
+  },
+  {
+    from: "c",
+    to: "i"
+  },
+  {
+    from: "d",
+    to: "e"
+  },
+  {
+    from: "e",
+    to: "f"
+  },
+  {
+    from: "g"
+  }
+]);
+
+const components = connectedTest.getWeaklyConnectedComponents();
+
+compare(components.length, 2);
+compare(components[0].length, 5);
+compare(components[1].length, 3);
+
+compare(graph.Iterator.AStar(connectedTest.getVertex("a"), "e"), null);
+compare(graph.Iterator.AStar(connectedTest.getVertex("a"), "h").length, 4);
+
+// const bigGraph = new graph.Graph();
+
+// for (let i = 0; i < 25000; i++) {
+//   const vertices = bigGraph.getVertices();
+
+//   const newVertex = bigGraph.insertVertex(i.toString());
+
+//   if (vertices.length && Math.random() > 0) {
+//     const randomVertex = vertices[Math.floor(Math.random() * vertices.length)];
+//     bigGraph.connectTwoway(newVertex.getKey(), randomVertex.getKey());
+//   }
+// }
+
+// console.log(new Date());
+// //console.log(`Components: `, bigGraph.getStronglyConnectedComponents());
+// //console.log(bigGraph.getWeaklyConnectedComponents());
+
+// //console.log(bigGraph.getVertex("0").breadthFirstSearch("40000"));
+
+// // console.log(graph.Iterator.AStar(bigGraph.getVertex("0"), "12500").map(v => v.getKey()));
+
+// console.log(new Date());

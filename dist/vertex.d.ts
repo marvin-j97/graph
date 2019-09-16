@@ -1,8 +1,9 @@
 import { Edge } from "./edge";
 export declare class Vertex {
-    readonly key: string;
+    protected key: string;
     protected edges: Edge[];
     constructor(key: string);
+    getKey(): string;
     removeEdge(edge: Edge): void;
     addEdge(edge: Edge): void;
     isSource(): boolean;
@@ -19,8 +20,9 @@ export declare class Vertex {
     incidentEdges(): Edge[];
     opposite(edge: Edge): Vertex;
     adjacentVertices(): Vertex[];
+    protected search(searchKey: string, traversal: (start: Vertex, onVisit: (v: Vertex) => boolean | undefined) => void): Vertex | null;
     depthFirstSearch(searchKey: string): Vertex | null;
     breadthFirstSearch(searchKey: string): Vertex | null;
-    depthFirstTraversal(func: (v: Vertex) => void): null;
-    breadthFirstTraversal(func: (v: Vertex) => void): Vertex | null;
+    depthFirstTraversal(onVisit: (v: Vertex) => boolean | undefined): void;
+    breadthFirstTraversal(onVisit: (v: Vertex) => boolean | undefined): void;
 }

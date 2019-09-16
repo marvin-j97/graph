@@ -6,3 +6,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./vertex"));
 __export(require("./graph"));
 __export(require("./edge"));
+__export(require("./iterator"));

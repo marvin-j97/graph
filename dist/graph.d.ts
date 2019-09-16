@@ -2,11 +2,13 @@ import { Vertex } from "./vertex";
 import { Edge } from "./edge";
 import { HashMap } from "./util";
 declare type VertexMap = HashMap<Vertex>;
+declare type Component = Vertex[];
 export declare class Graph {
     protected vertices: VertexMap;
     private _numVertices;
     protected edges: Edge[];
     private _numEdges;
+    getWeaklyConnectedComponents(): Component[];
     removeVertex(key: string): void;
     generateMap(): {
         from: string;

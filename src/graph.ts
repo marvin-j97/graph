@@ -1,14 +1,38 @@
 import { Vertex } from "./vertex";
 import { Edge } from "./edge";
 import { HashMap } from "./util";
+import { Iterator } from "./iterator";
 
 type VertexMap = HashMap<Vertex>;
+type Component = Vertex[];
 
 export class Graph {
   protected vertices: VertexMap = {};
   private _numVertices = 0;
   protected edges: Edge[] = [];
   private _numEdges = 0;
+
+  getWeaklyConnectedComponents(): Component[] {
+    const vertices = this.getVertices();
+
+    const components = [] as Component[];
+
+    for (const start of vertices) {
+      if (components.some(component => component.includes(start)))
+        continue;
+
+      const connectedVertices = [] as Vertex[];
+
+      Iterator.breadthFirstTraversal(start, v => {
+        connectedVertices.push(v);
+      }, true);
+
+      if (connectedVertices.length > 1)
+        components.push(connectedVertices);
+    }
+
+    return components;
+  }
 
   removeVertex(key: string) {
     const vertex = this.getVertex(key);
@@ -32,8 +56,8 @@ export class Graph {
 
     for (const edge of this.getEdges()) {
       map.push({
-        from: edge.getStart().key,
-        to: edge.getEnd().key,
+        from: edge.getStart().getKey(),
+        to: edge.getEnd().getKey(),
         label: edge.getLabel() || undefined,
         weight: edge.getWeight()
       });
@@ -41,7 +65,7 @@ export class Graph {
 
     for (const vertex of this.getVertices()) {
       if (vertex.degree() === 0) {
-        map.push({ from: vertex.key });
+        map.push({ from: vertex.getKey() });
       }
     }
 
@@ -117,7 +141,7 @@ export class Graph {
     if (!b)
       throw `Vertex '${end}' not found`;
 
-    if (a.out().find(v => v.key === end))
+    if (a.out().find(v => v.getKey() === end))
       throw `Vertex '${start}' already connected to '${end}'`;
 
     const edge = new Edge(a, b, label, weight);

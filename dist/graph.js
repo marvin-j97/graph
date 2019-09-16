@@ -2,12 +2,28 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const vertex_1 = require("./vertex");
 const edge_1 = require("./edge");
+const iterator_1 = require("./iterator");
 class Graph {
     constructor() {
         this.vertices = {};
         this._numVertices = 0;
         this.edges = [];
         this._numEdges = 0;
+    }
+    getWeaklyConnectedComponents() {
+        const vertices = this.getVertices();
+        const components = [];
+        for (const start of vertices) {
+            if (components.some(component => component.includes(start)))
+                continue;
+            const connectedVertices = [];
+            iterator_1.Iterator.breadthFirstTraversal(start, v => {
+                connectedVertices.push(v);
+            }, true);
+            if (connectedVertices.length > 1)
+                components.push(connectedVertices);
+        }
+        return components;
     }
     removeVertex(key) {
         const vertex = this.getVertex(key);
@@ -26,15 +42,15 @@ class Graph {
         const map = [];
         for (const edge of this.getEdges()) {
             map.push({
-                from: edge.getStart().key,
-                to: edge.getEnd().key,
+                from: edge.getStart().getKey(),
+                to: edge.getEnd().getKey(),
                 label: edge.getLabel() || undefined,
                 weight: edge.getWeight()
             });
         }
         for (const vertex of this.getVertices()) {
             if (vertex.degree() === 0) {
-                map.push({ from: vertex.key });
+                map.push({ from: vertex.getKey() });
             }
         }
         return map;
@@ -89,7 +105,7 @@ class Graph {
         const b = this.getVertex(end);
         if (!b)
             throw `Vertex '${end}' not found`;
-        if (a.out().find(v => v.key === end))
+        if (a.out().find(v => v.getKey() === end))
             throw `Vertex '${start}' already connected to '${end}'`;
         const edge = new edge_1.Edge(a, b, label, weight);
         a.addEdge(edge);
