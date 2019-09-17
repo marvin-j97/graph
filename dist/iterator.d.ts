@@ -1,6 +1,6 @@
 import { Vertex } from "./vertex";
 export declare class Iterator {
     static findPath(start: Vertex, end: string): Vertex[] | null;
-    static breadthFirstTraversal(start: Vertex, onVisit?: (v: Vertex) => boolean | void, undirected?: boolean): void;
-    static depthFirstTraversal(start: Vertex, onVisit?: (v: Vertex) => boolean | void, undirected?: boolean): void;
+    static breadthFirstTraversal(start: Vertex, undirected?: boolean): Generator<Vertex, void, unknown>;
+    static depthFirstTraversal(start: Vertex, undirected?: boolean): Generator<Vertex, void, unknown>;
 }

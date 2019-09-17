@@ -100,40 +100,59 @@ export class Vertex {
   }
 
   adjacentVertices(): Vertex[] {
-    let adjacents: Vertex[] = [];
-    for (const edge of this.edges) {
-      adjacents.push(this.opposite(edge));
-    }
-
-    return adjacents;
+    return this.edges.map(edge => this.opposite(edge))
   }
 
-  protected search(searchKey: string, traversal: (start: Vertex, onVisit: (v: Vertex) => boolean | undefined) => void): Vertex | null {
-    let vertex: Vertex | null = null;
+  protected search(searchKey: string, traversal: (start: Vertex, undirected?: boolean) => Generator<Vertex, void, unknown>, undirected?: boolean): Vertex | null {
+    let iterator = traversal(this, undirected);
+    let v: Vertex | void;
 
-    traversal(this, v => {
-      if (v.key == searchKey) {
-        vertex = v;
-        return true;
+    while (true) {
+      v = iterator.next().value;
+
+      if (!v) {
+        return null;
       }
-    });
 
-    return vertex;
+      if (v.getKey() == searchKey) {
+        return v;
+      }
+    }
   }
 
-  depthFirstSearch(searchKey: string): Vertex | null {
-    return this.search(searchKey, Iterator.depthFirstTraversal);
+  depthFirstSearch(searchKey: string, undirected?: boolean): Vertex | null {
+    return this.search(searchKey, Iterator.depthFirstTraversal, undirected);
   }
 
-  breadthFirstSearch(searchKey: string): Vertex | null {
-    return this.search(searchKey, Iterator.breadthFirstTraversal);
+  breadthFirstSearch(searchKey: string, undirected?: boolean): Vertex | null {
+    return this.search(searchKey, Iterator.breadthFirstTraversal, undirected);
   }
 
   depthFirstTraversal(onVisit: (v: Vertex) => boolean | undefined): void {
-    return Iterator.depthFirstTraversal(this, onVisit);
+    let iterator = Iterator.depthFirstTraversal(this);
+
+    let v: Vertex | void;
+    let cont = true;
+
+    while (cont) {
+      v = iterator.next().value;
+
+      if (!v || onVisit(v) === true)
+        cont = false;
+    }
   }
 
   breadthFirstTraversal(onVisit: (v: Vertex) => boolean | undefined): void {
-    return Iterator.breadthFirstTraversal(this, onVisit);
+    let iterator = Iterator.breadthFirstTraversal(this);
+
+    let v: Vertex | void;
+    let cont = true;
+
+    while (cont) {
+      v = iterator.next().value;
+
+      if (!v || onVisit(v) === true)
+        cont = false;
+    }
   }
 }

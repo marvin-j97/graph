@@ -36,9 +36,9 @@ compare(g.numEdges(), 2);
 compare(a.degree(), 1);
 compare(b.degree(), 2);
 
-compare(g.getConnection("a", "b"), a_b_edge);
-compare(g.getConnection("b", "a"), null);
-compare(g.getConnection("a", "c"), null);
+compare(g.getEdge("a", "b"), a_b_edge);
+compare(g.getEdge("b", "a"), null);
+compare(g.getEdge("a", "c"), null);
 compare(a.opposite(a_b_edge), b);
 
 try {
@@ -260,3 +260,28 @@ compare(graph.Iterator.findPath(connectedTest.getVertex("a"), "h").length, 4);
 // // console.log(graph.Iterator.findPath(bigGraph.getVertex("0"), "12500").map(v => v.getKey()));
 
 // console.log(new Date());
+const removeTest = graph.Graph.from([{
+    from: "a",
+    to: "b"
+  },
+  {
+    from: "b",
+    to: "c"
+  },
+  {
+    from: "c",
+    to: "h"
+  }
+]);
+
+compare(removeTest.numVertices(), 4);
+compare(removeTest.numEdges(), 3);
+compare(removeTest.get("b").incidentEdges().length, 2);
+
+removeTest.removeEdge(removeTest.getEdge("a", "b"));
+
+compare(removeTest.numVertices(), 4);
+compare(removeTest.numEdges(), 2);
+
+compare(removeTest.get("a").incidentEdges().length, 0);
+compare(removeTest.get("b").incidentEdges().length, 1);

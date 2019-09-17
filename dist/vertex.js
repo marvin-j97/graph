@@ -75,33 +75,46 @@ class Vertex {
         throw `Edge not attached to vertex '${this.key}'`;
     }
     adjacentVertices() {
-        let adjacents = [];
-        for (const edge of this.edges) {
-            adjacents.push(this.opposite(edge));
-        }
-        return adjacents;
+        return this.edges.map(edge => this.opposite(edge));
     }
-    search(searchKey, traversal) {
-        let vertex = null;
-        traversal(this, v => {
-            if (v.key == searchKey) {
-                vertex = v;
-                return true;
+    search(searchKey, traversal, undirected) {
+        let iterator = traversal(this, undirected);
+        let v;
+        while (true) {
+            v = iterator.next().value;
+            if (!v) {
+                return null;
             }
-        });
-        return vertex;
+            if (v.getKey() == searchKey) {
+                return v;
+            }
+        }
     }
-    depthFirstSearch(searchKey) {
-        return this.search(searchKey, iterator_1.Iterator.depthFirstTraversal);
+    depthFirstSearch(searchKey, undirected) {
+        return this.search(searchKey, iterator_1.Iterator.depthFirstTraversal, undirected);
     }
-    breadthFirstSearch(searchKey) {
-        return this.search(searchKey, iterator_1.Iterator.breadthFirstTraversal);
+    breadthFirstSearch(searchKey, undirected) {
+        return this.search(searchKey, iterator_1.Iterator.breadthFirstTraversal, undirected);
     }
     depthFirstTraversal(onVisit) {
-        return iterator_1.Iterator.depthFirstTraversal(this, onVisit);
+        let iterator = iterator_1.Iterator.depthFirstTraversal(this);
+        let v;
+        let cont = true;
+        while (cont) {
+            v = iterator.next().value;
+            if (!v || onVisit(v) === true)
+                cont = false;
+        }
     }
     breadthFirstTraversal(onVisit) {
-        return iterator_1.Iterator.breadthFirstTraversal(this, onVisit);
+        let iterator = iterator_1.Iterator.breadthFirstTraversal(this);
+        let v;
+        let cont = true;
+        while (cont) {
+            v = iterator.next().value;
+            if (!v || onVisit(v) === true)
+                cont = false;
+        }
     }
 }
 exports.Vertex = Vertex;

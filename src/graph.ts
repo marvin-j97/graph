@@ -22,16 +22,35 @@ export class Graph {
         continue;
 
       const connectedVertices = [] as Vertex[];
+      
+      const iterator = Iterator.breadthFirstTraversal(start);
+      let v: Vertex | void;
 
-      Iterator.breadthFirstTraversal(start, v => {
+      while (true) {
+        v = iterator.next().value;
+
+        if (!v) {
+          break;
+        }
+
         connectedVertices.push(v);
-      }, true);
+      }
 
       if (connectedVertices.length > 1)
         components.push(connectedVertices);
     }
 
     return components;
+  }
+
+  removeEdge(edge: Edge) {
+    const vertex = this.getVertex(edge.getStart().getKey());
+
+    if (vertex) {
+      this.edges = this.edges.filter(e => e !== edge);
+      vertex.removeEdge(edge);
+      this._numEdges--;
+    }
   }
 
   removeVertex(key: string) {
@@ -100,6 +119,10 @@ export class Graph {
     return this._numEdges;
   }
 
+  get(key: string): Vertex | null {
+    return this.getVertex(key);
+  }
+
   getVertex(key: string): Vertex | null {
     return this.vertices[key] || null;
   }
@@ -162,7 +185,7 @@ export class Graph {
     return [edgeOne, edgeTwo];
   }
 
-  getConnection(start: string, end: string): Edge | null {
+  getEdge(start: string, end: string): Edge | null {
     const a = this.getVertex(start);
 
     if (!a)
@@ -173,10 +196,10 @@ export class Graph {
     if (!b)
       throw `Vertex '${end}' not found`;
 
-    const edges = a
-      .incidentEdges()
-      .filter(edge => edge.getStart() == a && edge.getEnd() == b);
+    const edge = a
+      .outgoingEdges()
+      .find(edge => edge.getEnd() == b);
 
-    return edges[0] || null;
+    return edge || null;
   }
 }

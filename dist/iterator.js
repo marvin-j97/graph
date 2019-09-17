@@ -47,7 +47,7 @@ class Iterator {
         }
         return null;
     }
-    static breadthFirstTraversal(start, onVisit, undirected) {
+    static *breadthFirstTraversal(start, undirected) {
         const queue = [start];
         const visited = {};
         const hasBeenVisited = (key) => visited[key] === true;
@@ -55,8 +55,6 @@ class Iterator {
         while (!!queue.length) {
             const vertex = queue.shift();
             if (vertex) {
-                if (onVisit && onVisit(vertex) === true)
-                    return;
                 const connectedVertices = (undirected === true) ? vertex.adjacentVertices() : vertex.out();
                 for (const other of connectedVertices) {
                     if (!hasBeenVisited(other.getKey())) {
@@ -64,23 +62,23 @@ class Iterator {
                         queue.push(other);
                     }
                 }
+                yield vertex;
             }
         }
     }
-    static depthFirstTraversal(start, onVisit, undirected) {
+    static *depthFirstTraversal(start, undirected) {
         const stack = [start];
         const visited = {};
         const hasBeenVisited = (key) => visited[key] === true;
         while (!!stack.length) {
             const vertex = stack.pop();
             if (vertex) {
-                if (onVisit && onVisit(vertex) === true)
-                    return;
                 const connectedVertices = (undirected === true) ? vertex.adjacentVertices() : vertex.out();
                 if (!hasBeenVisited(vertex.getKey())) {
                     visited[vertex.getKey()] = true;
                     stack.push(...connectedVertices);
                 }
+                yield vertex;
             }
         }
     }

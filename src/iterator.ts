@@ -66,7 +66,7 @@ export class Iterator {
     return null;
   }
 
-  static breadthFirstTraversal(start: Vertex, onVisit?: (v: Vertex) => boolean | void, undirected?: boolean): void {
+  static * breadthFirstTraversal(start: Vertex, undirected?: boolean) {
     const queue: Vertex[] = [start];
     const visited: HashMap<boolean> = {};
 
@@ -78,9 +78,6 @@ export class Iterator {
       const vertex = queue.shift();
 
       if (vertex) {
-        if (onVisit && onVisit(vertex) === true)
-          return;
-
         const connectedVertices = (undirected === true) ? vertex.adjacentVertices() : vertex.out();
 
         for (const other of connectedVertices) {
@@ -89,11 +86,13 @@ export class Iterator {
             queue.push(other);
           }
         }
+
+        yield vertex;
       }
     }
   }
 
-  static depthFirstTraversal(start: Vertex, onVisit?: (v: Vertex) => boolean | void, undirected?: boolean): void {
+  static * depthFirstTraversal(start: Vertex, undirected?: boolean) {
     const stack: Vertex[] = [start];
     const visited: HashMap<boolean> = {};
 
@@ -103,15 +102,14 @@ export class Iterator {
       const vertex = stack.pop();
 
       if (vertex) {
-        if (onVisit && onVisit(vertex) === true)
-          return;
-
         const connectedVertices = (undirected === true) ? vertex.adjacentVertices() : vertex.out();
 
         if (!hasBeenVisited(vertex.getKey())) {
           visited[vertex.getKey()] = true;
           stack.push(...connectedVertices);
         }
+
+        yield vertex;
       }
     }
   }

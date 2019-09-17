@@ -20,9 +20,9 @@ export declare class Vertex {
     incidentEdges(): Edge[];
     opposite(edge: Edge): Vertex;
     adjacentVertices(): Vertex[];
-    protected search(searchKey: string, traversal: (start: Vertex, onVisit: (v: Vertex) => boolean | undefined) => void): Vertex | null;
-    depthFirstSearch(searchKey: string): Vertex | null;
-    breadthFirstSearch(searchKey: string): Vertex | null;
+    protected search(searchKey: string, traversal: (start: Vertex, undirected?: boolean) => Generator<Vertex, void, unknown>, undirected?: boolean): Vertex | null;
+    depthFirstSearch(searchKey: string, undirected?: boolean): Vertex | null;
+    breadthFirstSearch(searchKey: string, undirected?: boolean): Vertex | null;
     depthFirstTraversal(onVisit: (v: Vertex) => boolean | undefined): void;
     breadthFirstTraversal(onVisit: (v: Vertex) => boolean | undefined): void;
 }

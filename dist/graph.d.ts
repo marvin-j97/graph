@@ -9,6 +9,7 @@ export declare class Graph {
     protected edges: Edge[];
     private _numEdges;
     getWeaklyConnectedComponents(): Component[];
+    removeEdge(edge: Edge): void;
     removeVertex(key: string): void;
     generateMap(): {
         from: string;
@@ -24,6 +25,7 @@ export declare class Graph {
     }[]): Graph;
     numVertices(): number;
     numEdges(): number;
+    get(key: string): Vertex | null;
     getVertex(key: string): Vertex | null;
     getVertices(): Vertex[];
     getEdges(): Edge[];
@@ -31,6 +33,6 @@ export declare class Graph {
     insertVertex(key: string): Vertex;
     connectOneway(start: string, end: string, label?: string, weight?: number): Edge;
     connectTwoway(start: string, end: string, label?: string, weight?: number): [Edge, Edge];
-    getConnection(start: string, end: string): Edge | null;
+    getEdge(start: string, end: string): Edge | null;
 }
 export {};
