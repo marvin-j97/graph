@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "watch": "tsc --watch",
-    "test": "node test/"
+    "test": "mocha -r ts-node/register test/index.ts",
+    "oldtest": "node test/"
   },
   "repository": {
     "type": "git",
@@ -17,5 +18,13 @@
   "bugs": {
     "url": "https://github.com/dotvirus/graph.ts/issues"
   },
-  "homepage": "https://github.com/dotvirus/graph.ts#readme"
+  "homepage": "https://github.com/dotvirus/graph.ts#readme",
+  "devDependencies": {
+    "@types/chai": "^4.2.2",
+    "@types/mocha": "^5.2.7",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.0",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
+  }
 }

@@ -10,7 +10,7 @@ export class Edge {
     this.start = s;
     this.end = t;
     this.label = label || null;
-    
+
     if (weight !== undefined)
       this.setWeight(weight);
   }

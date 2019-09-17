@@ -9,7 +9,7 @@ function reconstructPath(cameFrom, current) {
     return totalPath;
 }
 class Iterator {
-    static AStar(start, end) {
+    static findPath(start, end) {
         let openSet = [start];
         const cameFrom = {};
         let gScore = {};

@@ -13,7 +13,7 @@ function reconstructPath(cameFrom: HashMap<Vertex>, current: Vertex): Vertex[] {
 }
 
 export class Iterator {
-  static AStar(start: Vertex, end: string): Vertex[] | null {
+  static findPath(start: Vertex, end: string): Vertex[] | null {
     let openSet = [start] as Vertex[];
     const cameFrom = {} as HashMap<Vertex>;
 

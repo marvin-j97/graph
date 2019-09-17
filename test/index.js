@@ -235,8 +235,8 @@ compare(components.length, 2);
 compare(components[0].length, 5);
 compare(components[1].length, 3);
 
-compare(graph.Iterator.AStar(connectedTest.getVertex("a"), "e"), null);
-compare(graph.Iterator.AStar(connectedTest.getVertex("a"), "h").length, 4);
+compare(graph.Iterator.findPath(connectedTest.getVertex("a"), "e"), null);
+compare(graph.Iterator.findPath(connectedTest.getVertex("a"), "h").length, 4);
 
 // const bigGraph = new graph.Graph();
 
@@ -257,6 +257,6 @@ compare(graph.Iterator.AStar(connectedTest.getVertex("a"), "h").length, 4);
 
 // //console.log(bigGraph.getVertex("0").breadthFirstSearch("40000"));
 
-// // console.log(graph.Iterator.AStar(bigGraph.getVertex("0"), "12500").map(v => v.getKey()));
+// // console.log(graph.Iterator.findPath(bigGraph.getVertex("0"), "12500").map(v => v.getKey()));
 
 // console.log(new Date());
