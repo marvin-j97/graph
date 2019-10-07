@@ -12,7 +12,13 @@
     "type": "git",
     "url": "git+https://github.com/dotvirus/graph.ts.git"
   },
-  "keywords": [],
+  "keywords": [
+    "graph",
+    "graphtheory",
+    "network",
+    "vertex",
+    "graph-theory"
+  ],
   "author": "dotvirus",
   "license": "ISC",
   "bugs": {
