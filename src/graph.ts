@@ -10,7 +10,6 @@ export class Graph {
   protected vertices: VertexMap = {};
   private _numVertices = 0;
   protected edges: Edge[] = [];
-  private _numEdges = 0;
 
   getWeaklyConnectedComponents(): Component[] {
     const vertices = this.getVertices();
@@ -49,7 +48,6 @@ export class Graph {
     if (vertex) {
       this.edges = this.edges.filter(e => e !== edge);
       vertex.removeEdge(edge);
-      this._numEdges--;
     }
   }
 
@@ -65,7 +63,6 @@ export class Graph {
       for (const edge of edges) {
         vertex.removeEdge(edge);
         this.edges = this.edges.filter(e => e !== edge);
-        this._numEdges--;
       }
     }
   }
@@ -116,7 +113,7 @@ export class Graph {
   }
 
   numEdges() {
-    return this._numEdges;
+    return this.edges.length;
   }
 
   get(key: string): Vertex | null {
@@ -175,7 +172,6 @@ export class Graph {
       b.addEdge(edge);
 
     this.edges.push(edge);
-    this._numEdges++;
     return edge;
   }
 
